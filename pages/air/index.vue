@@ -1,7 +1,7 @@
 <template>
-    <div>
-        首页
-    </div>
+  <div class="index">
+       机票模块首页文件
+  </div>
 </template>
 
 <script>
