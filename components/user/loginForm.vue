@@ -19,6 +19,14 @@
 <script>
 export default {
   data() {
+    const validateUsername =(rule,value,callback)=>{
+      const reg = /^1[3-9][0-9]{9}/;
+      if(reg.test(value)){
+        callback()
+      } else{
+        callback("手机号码格式错误")
+      }
+    }
     return {
       // 表单数据
       form: {
@@ -29,8 +37,7 @@ export default {
       rules: {
         username: [
           {
-            required: true,
-            message: "请输入用户名",
+            validator: validateUsername,
             trigger: "blur"
           }
         ],
@@ -49,19 +56,18 @@ export default {
     handleLoginSubmit() {
       console.log(this.form);
       this.$refs["form"].validate(valid => {
+        // if(!valid)return;
+        // this.$store.dispatch("user/login",this.form)
         if (valid) {
-          this.$store.dispatch("user/login", this.form).then(res => {
-            // 成功提示
-            this.$message({
-              message: "登录成功，正在跳转",
-              type: "success"
-            });
-            // 跳转到首页
-            setTimeout(() => {
-              this.$router.replace("/");
-            }, 1000);
+          this.$store.dispatch("user/login", this.form)
+          .then(res => {
+            // 登录成功提示
+            this.$message.success('登录成功，返回上一个页面');
+            // 跳转到上一页
+            this.$router.back()
           });
         }
+
       });
     }
   }

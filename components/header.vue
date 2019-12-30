@@ -52,12 +52,14 @@ export default {
     methods: {
         // 用户退出
         handleLogout(){
-            const {commit} = this.$store;
-            commit('user/cleanUserInfo')
-            this.$message({
-                message: "退出成功",
-                type: "success"
-            })
+            // const {commit} = this.$store;
+            // commit('user/cleanUserInfo')
+            // this.$message({
+            //     message: "退出成功",
+            //     type: "success"
+            // })
+            this.$store.commit('user/setUserInfo', {})
+            this.$message.success('退出成功')
         },
     }
 }
