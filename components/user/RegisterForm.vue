@@ -100,38 +100,51 @@ export default {
   methods: {
     // 发送验证码
     handleSendCaptcha() {
-      if (this.form.username === "") {
-        this.$message.error("手机号码不能为空");
-      } else {
-        this.$axios({
-          method: "POST",
-          url: "/captchas",
-          data: {
-            tel: this.form.username
-          }
-        }).then(res => {
-          console.log(res);
-          this.$message.success(`验证码为${res.data.code}`);
-        });
+      // if (this.form.username === "") {
+      //   this.$message.error("手机号码不能为空");
+      // } else {
+      //   this.$axios({
+      //     method: "POST",
+      //     url: "/captchas",
+      //     data: {
+      //       tel: this.form.username
+      //     }
+      //   }).then(res => {
+      //     console.log(res);
+      //     this.$message.success(`验证码为${res.data.code}`);
+      //   });
+      // }
+      if(!this.form.username){
+        this.$message.error("手机号码不能为空")
+        return;
       }
+      this.$store.dispatch("user/sendCaptcha", this.form.username).then(res => {
+        // console.log(res);
+        this.$message.success(`验证码为${res.data.code}`);
+      });
     },
     // 注册
     // 13435536047
 
     handleRegSubmit() {
-      console.log(this.form);
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          const { checkPassword, ...prop } = this.form;
-          this.$axios({
-            method: "POST",
-            url: "/accounts/register",
-            data: prop
-          }).then(res => {
-            console.log(res);
-          });
-        }
-      });
+      // console.log(this.form);
+      // this.$refs["form"].validate(valid => {
+      //   if (valid) {
+      //     const { checkPassword, ...prop } = this.form;
+      //     this.$axios({
+      //       method: "POST",
+      //       url: "/accounts/register",
+      //       data: prop
+      //     }).then(res => {
+      //       console.log(res);
+      //     });
+      //   }
+      // });
+      const { checkPassword , ...prop} = this.form
+      this.$store.dispatch('user/enroll', prop)
+      .then(res=>{
+        this.$message.success('注册成功')
+      })
     }
   }
 };
