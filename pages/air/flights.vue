@@ -4,7 +4,8 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <flightsFilters />
+        <flightsFilters :data="cecheFlightsData" 
+        @setDataList="setDataList" />
 
         <!-- 航班头部布局 -->
         <flightsListHead />
@@ -44,7 +45,17 @@ export default {
   data() {
     return {
       //航班总数据{ info, flights, options, total }
-      flightsData: [],
+      flightsData: {
+        info : {},
+        options:{},
+        flights:[]
+      },
+      //缓存变量，被赋值后不会被修改
+      cecheFlightsData:{
+        info : {},
+        options:{},
+        flights:[]
+      },
       pageIndex: 1,
       pageSize: 5,
       total: 0
@@ -69,10 +80,14 @@ export default {
       url: "/airs",
       params: this.$route.query
     }).then(res => {
-      //   console.log(res);
+        console.log(res);
       this.flightsData = res.data;
+      // 缓存变量
+      this.cecheFlightsData = {...res.data}
       //数据数量
       this.total = this.flightsData.total;
+      // console.log(this.flightsData);
+      
     });
   },
   methods: {
@@ -83,7 +98,13 @@ export default {
     handleCurrentChange(val) {
       //   console.log(`当前页: ${val}`);
       this.pageIndex = val;
-    }
+    },
+    // 给过滤的组件修改flightsData
+    setDataList(arr){
+      // arr是符合条件的数据
+      this.flightsData.flights = arr 
+      this.total = arr.length
+    },
   }
 };
 </script>

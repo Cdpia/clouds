@@ -181,7 +181,7 @@ export default {
 
     // 提交表单是触发
     handleSubmit() {
-      // console.log(this.form);
+      console.log(this.form);
 
       // 自定义校验
       const rules = {
@@ -201,13 +201,13 @@ export default {
 
       let valid = true
       Object.keys(rules).forEach(key=>{
-        if(!rules[key].value.trim()){
+        if(rules[key].value.trim() === ''){
           this.$message.error(rules[key].err_message)
           valid = false
           return
         }
       })
-      if(!valid) return
+      if(valid === false) return
 
       this.$router.push({
         path: "/air/flights",
